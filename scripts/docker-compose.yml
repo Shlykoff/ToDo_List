@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  db:
+    image: nouchka/sqlite3
+    volumes:
+      - ./backend/db:/db
+    environment:
+      SQLITE_DATABASE: "todo.db"
+
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "sqlite:/db/todo.db"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3001:3000"
+    depends_on:
+      - backend
